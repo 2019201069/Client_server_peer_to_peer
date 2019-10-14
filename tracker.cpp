@@ -184,10 +184,10 @@ void recievedata(){//void * threadarg){
         if(thread_status != 0){
             cout<<"thread creation failed"<<endl;
         } 
-        if( i >= 3)
+        if( i >= 4)
             {
                 i = 0;
-                while(i < 3)
+                while(i < 4)
                 {
                         pthread_join(trackerlistnerThread[i++],NULL);
                 }

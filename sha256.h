@@ -10,7 +10,7 @@
 #define COL ":"
 #define SHASIZE 20
 #define MAXCLIENTS 50
-#define CHUNKSIZE 50  // must be 512 kb
+#define CHUNKSIZE 512  // must be 512 kb
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +30,17 @@
 #include <pthread.h>
 using namespace std;
 
+
+// for peer that needs to download the file
+// different for different file download
+unordered_map <string, set<long long>  > userchunkmap;
+unordered_map <string, set<long long>  > afterroundrobin;
+// user : chunks respective for a given file
+
+
+// for peer that is used to upload the file
+unordered_map <string, set<long long> > chunkinfo;    // updated while uploading the file
+// path and respective info
 
 
 string sha256_hash_string(unsigned char hash[SHA256_DIGEST_LENGTH])

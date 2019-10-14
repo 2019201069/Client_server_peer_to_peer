@@ -317,6 +317,9 @@ void send_show_downloads_info(int option, string ip, string port){
 	}
 }
 
+// unordered_map <string, set<long long> > chunkinfo;    // updated while uploading the file
+// // path and respective info
+
 void send_upload_file_info(int option, string ip, string port, string path, string fname, int groupid){
 	string option_s, groupid_s;
 	string col = COL;
@@ -325,13 +328,20 @@ void send_upload_file_info(int option, string ip, string port, string path, stri
 	string params = "";
 	FILE *fp = fopen(path.c_str(), "rb");
 	fseek(fp, 0, SEEK_END);
-	string filesize = to_string(ftell(fp));
+	long long filesize = ftell(fp);
+	long long chunks = filesize/CHUNKSIZE + 1; 
+	string filesize_s = to_string(filesize);
 	rewind(fp);
 	fclose(fp);
 	string sha = sha256_file(fp);// = shalcalc();
+
+	for(int i = 1; i <= chunks; i++){
+		chunkinfo[path].insert(i);
+	}
+
 	//path, sha ,groupid, filesize, username    FILE *fp2 = fopen("kkk.txt", "rb");
     //string msg1 = sha256_file(fp1);
-	params = params + option_s + col + ip + col + port + col + path + col + fname + col + sha + col + groupid_s + col + filesize + col + u_name_g + col; 
+	params = params + option_s + col + ip + col + port + col + path + col + fname + col + fname + col + groupid_s + col + filesize_s + col + u_name_g + col; 
 	if(loggedinflag){
 		cout<<params<<endl;
 		sendmsgdata(params, 9);
